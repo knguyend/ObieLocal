@@ -46,25 +46,29 @@ const getColorFromStartTime = (minutes) => {
     return `rgb(${rGAmount * 207}, 16, ${45 + bAmount * (200 - 45)})`;*/
 }
 
-const getMinutesUntilStart = (eventObj) => {    
-    const now = new Date();
-    const startTime = new Date(eventObj.start_time);
-    const hoursUntilStart =
+const getMinutesUntilStart = eventObj => {
+  const now = new Date();
+  const startTime = new Date(eventObj.start_time);
+  const hoursUntilStart =
     (startTime.getTime() - now.getTime()) / constants.HOUR_TO_MILLISECONDS;
-    return hoursUntilStart * 60;
-}
+  return hoursUntilStart * 60;
+};
 
 const Button = styled.button`
   width: 35px;
   height: 35px;
   padding: 0px;
   border-radius: 50%;
+  border-width: 0.5px;
+  box-shadow: 1px 1px 5px 1px #4e4e4e;
   background-color: ${props => getColorFromStartTime(props.minutesUntilStart)};
   animation-delay: ${props => props.animationDelay};
-  /* opacity: ${props => props.opacity}; */
 
+  /* Set clock number font*/
+  font-family: 'digital-7', sans-serif;
+  color: whitesmoke;
   /* The rotating semicircle in the animation. */
-  `;
+`;
 //   ::before {
 //     content: ' ';
 //     display: block;
@@ -76,7 +80,7 @@ const Button = styled.button`
 //     transform-origin: left;
 //     transform: rotate(0);
 //     overflow: hidden;
-    
+
 //     /* Each marker represents 6 hours, so the animation reflects that. */
 //     animation-name: spin, ${props => props.animationName};
 //     animation-duration: 10800s, 21600s;
@@ -168,7 +172,7 @@ class Marker extends React.Component {
   };
 
   render() {
-    const firstEvent = this.props.eventArray[0];    
+    const firstEvent = this.props.eventArray[0];
     const verified = firstEvent.verified;
     const minutesUntilStart = getMinutesUntilStart(firstEvent);
     return (
@@ -179,10 +183,12 @@ class Marker extends React.Component {
         <StyledMarker
         //   className={verified ? 'Marker-verified' : 'Marker-unverified'}
           onClick={() => this.props.handleMarkerClick(this.props.eventArray)}
-          animationName={this.displayData.animationName}
-          animationDelay={this.displayData.animationDelay}
+          //   animationName={this.displayData.animationName}
+          //   animationDelay={this.displayData.animationDelay}
           minutesUntilStart={minutesUntilStart}
-        />
+        >
+          88:88
+        </StyledMarker>
         <Shadow/>
       </MarkerWrap>
     );
