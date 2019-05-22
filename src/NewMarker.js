@@ -17,7 +17,7 @@ const getColorFromStartTime = minutes => {
   } else if (minutes < 0) {
     minutes = 0;
   }
-  const spectrum = (minutes / LATEST_POSSIBLE) * 152*3;
+  const spectrum = (minutes / LATEST_POSSIBLE) * 152 * 3;
   var red, green, blue;
   if (spectrum <= 152) {
     red = 173;
@@ -44,7 +44,7 @@ const getMinutesUntilStart = eventObj => {
   const startTime = new Date(eventObj.start_time);
   const hoursUntilStart =
     (startTime.getTime() - now.getTime()) / constants.HOUR_TO_MILLISECONDS;
-    console.log(hoursUntilStart);
+  console.log(hoursUntilStart);
   return hoursUntilStart * 60;
 };
 
@@ -130,7 +130,7 @@ const StyledMarker = styled.button`
   }
 
   .am-pm {
-    color: whitesmoke;    
+    color: whitesmoke;
     font-family: 'digital-7', sans-serif;
     font-size: 10px;
   }
@@ -190,6 +190,9 @@ class Marker extends React.Component {
     const startTime = firstEvent.start_time
       ? dateTime.create(new Date(firstEvent.start_time), 'I:M').format()
       : '??';
+    const amOrPm = firstEvent.start_time
+      ? dateTime.create(new Date(firstEvent.start_time), 'p').format()
+      : '??';
     const minutesUntilStart = getMinutesUntilStart(firstEvent);
     return (
       <MarkerWrap
@@ -204,7 +207,7 @@ class Marker extends React.Component {
           minutesUntilStart={minutesUntilStart}
         >
           <span className="numbers">{startTime}</span>
-          <span className="am-pm"> P</span>
+          <span className="am-pm"> {amOrPm.substring(0, 1)}</span>
         </StyledMarker>
         <Shadow />
       </MarkerWrap>
