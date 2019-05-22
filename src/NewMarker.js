@@ -108,7 +108,7 @@ const StyledMarker = styled.button`
   border: 3px solid ${props => getColorFromStartTime(props.minutesUntilStart)};
   width: 50px;
   height: 20px;
-  z-index: 2;
+  z-index: 1;
 
   ::after {
     position: absolute;
