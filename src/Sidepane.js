@@ -17,6 +17,10 @@ const StyledPane = styled.div`
   position: fixed;
   transition: all 1s;
   z-index: 2;
+
+  p:not(:last-child) {
+    margin: 0 0 20px;
+  }
 `;
 
 const PaneBody = styled.div`
@@ -51,7 +55,7 @@ const PaneBody = styled.div`
     font-weight: bold;
   }
   /* // TODO(ML): remove this to see if img size is correct */
-  .event-img{
+  .event-img {
     max-width: 95%;
     margin: auto;
   }
@@ -173,7 +177,9 @@ export default class Sidepane extends Component {
         <PrevButton id="button-prev-event" {...prevProps}>
           {`<<`}
         </PrevButton>
-        <EventNumber>{this.props.eventIdx+1}/{this.props.eventArray.length}</EventNumber>
+        <EventNumber>
+          {this.props.eventIdx + 1}/{this.props.eventArray.length}
+        </EventNumber>
         <NextButton id={'button-next-event'} {...nextProps}>
           >>
         </NextButton>
@@ -183,7 +189,7 @@ export default class Sidepane extends Component {
 
   render() {
     const timeString = this.getEventTimeString(this.props.eventIdx);
-    const locationName = 
+    const locationName =
       this.props.eventArray[this.props.eventIdx].location_name || '';
     const locationString =
       this.props.eventArray[this.props.eventIdx].address || 'Location unknown.';
