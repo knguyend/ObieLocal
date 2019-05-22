@@ -6,10 +6,44 @@ import constants from './constants';
 const LATEST_POSSIBLE = 1080;
 
 const getColorFromStartTime = (minutes) => {
-    minutes = Math.abs(minutes);
+    /*minutes = Math.abs(minutes);*/
+    /* Color runs from:
+    RED ------------> YELLOW ------> GREEN -------> CYAN -----------> BLUE
+    (173,21,21) -> (173,173,21) -> (21,173,21) -> (21,173,173) -> (21,100,173)
+    */
+    if (minutes>LATEST_POSSIBLE) {
+      minutes = LATEST_POSSIBLE;
+    }
+    else if (minutes<0){
+      minutes = 0;
+    }
+    const spectrum = minutes / LATEST_POSSIBLE * 529;
+    var red, green, blue;
+    if (spectrum <= 152){
+      red = 173;
+      green = 21 + spectrum;
+      blue = 21;
+    }
+    else if (spectrum <= 152*2){
+      red = 173 - (spectrum-152);
+      green = 173;
+      blue = 21;
+    }
+    else if (spectrum <= 152*3){
+      red = 21;
+      green = 173;
+      blue = 21 + (spectrum-152*2);
+    }
+    else {
+      red = 21;
+      green = 173 - (spectrum-152*3);
+      blue = 173;
+    }
+    return `rgb(${red}, ${green}, ${blue})`;
+    /*
     const bAmount = minutes / LATEST_POSSIBLE;
     const rGAmount = 1 - bAmount;
-    return `rgb(${rGAmount * 207}, 16, ${45 + bAmount * (200 - 45)})`;
+    return `rgb(${rGAmount * 207}, 16, ${45 + bAmount * (200 - 45)})`;*/
 }
 
 const getMinutesUntilStart = (eventObj) => {    
@@ -61,6 +95,43 @@ const MarkerWrap = styled.div`
   animation-iteration-count: infinite;
 `;
 
+const StyledMarker = styled.button`
+position: absolute;
+/*top: 40%;
+left: 50%;*/
+top: -25px;
+left: -22px;
+background-color: ${props => getColorFromStartTime(props.minutesUntilStart)};
+border-radius: 20%;
+/* Needs to store color somewhere*/
+border: 3px solid ${props => getColorFromStartTime(props.minutesUntilStart)}; 
+width: 50px;
+height: 20px;
+
+::after {
+  position: absolute;
+  content: '';
+  width: 0px;
+  height: 0px;
+  bottom: -24px;
+  left: 17px;
+  border: 5px solid transparent;
+  border-top: 17px solid ${props => getColorFromStartTime(props.minutesUntilStart)};
+}
+`;
+
+const Shadow = styled.div`
+background: #d6d4d4;
+border-radius: 50%;
+height: 14px;
+width: 14px;
+left: 8px;
+top: -6px;
+position: absolute;
+margin: 11px 0px -0px -12px;
+transform: rotateX(55deg);
+z-index: -2 ;`
+
 class Marker extends React.Component {
   constructor(props) {
     super(props);
@@ -105,13 +176,14 @@ class Marker extends React.Component {
         blink={this.displayData.blink}
         opacity={this.displayData.opacity}
       >
-        <Button
+        <StyledMarker
         //   className={verified ? 'Marker-verified' : 'Marker-unverified'}
           onClick={() => this.props.handleMarkerClick(this.props.eventArray)}
           animationName={this.displayData.animationName}
           animationDelay={this.displayData.animationDelay}
           minutesUntilStart={minutesUntilStart}
         />
+        <Shadow/>
       </MarkerWrap>
     );
   }
